@@ -5,18 +5,26 @@ from cryptor import *
 app = FastAPI()
 
 @app.post("/append/{file_path}")
-async def append_log(file_path: str, data: dict,cipher:dict={"cipher":""}):
+async def append_log(file_path: str, data: dict):
     """Append a log to a file with the current datetime at the start."""
     try:
         with open(file_path,"a+") as file:
-            txt=''.join(data.values())
-            if "rc4" in str(cipher["cipher"]).lower():
-                txt=rc4_encrypt(txt,str(cipher["key"]).encode())
+            txt=data["data"]
+            iv=""
+            if "cipher" in data.keys():
+                if  "rc4" in str(data["cipher"]).lower():
+                    txt=rc4_encrypt(txt,str(data["key"]).encode()).hex()
+                if str(data["cipher"]).lower()=="aes":
+                    cipher=aes_encrypt(txt,str(data["key"]).encode())
+                    txt=cipher[0].hex()
+                    iv=cipher[1].hex()
+                    
 
             file.write(f"{datetime.now()} - {txt}\n")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error appending to file: {str(e)}")
-
+    if len(iv)>1:
+        return{"message":"Log appended successfully","IV":iv}
     return {"message":"Log appended successfully"}
 
 
