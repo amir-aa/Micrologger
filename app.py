@@ -49,3 +49,10 @@ def get_datetime_from_line(line: str) -> datetime:
     """
     datetime_str = line.split(" - ")[0]
     return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+
+@app.get("/decrypt/{algorithm}")
+async def decr(algorithm:str,cipher:dict):
+    if "rc4" in algorithm.lower():
+        return {"decrypted": rc4_decrypt(bytes.fromhex(cipher["cipher"]),cipher["key"])}
+    elif "aes" in algorithm.lower():
+        return {"decrypted": aes_decrypt(bytes.fromhex(cipher["cipher"]),cipher["key"],bytes.fromhex(cipher["iv"]))}
