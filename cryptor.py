@@ -24,7 +24,7 @@ def aes_decrypt(ciphertext, key, iv):
     decrypted_message = unpad(cipher.decrypt(ciphertext), AES.block_size)
     return decrypted_message.decode()
 
-# Example usage:
+
 key_aes = get_random_bytes(32)  # 128-bit key
 message = "Hello, AES!"
 
@@ -35,8 +35,6 @@ print(f"Original Message: {message}")
 print(f"Ciphertext (AES): {ciphertext_aes}")
 print(f"Decrypted Message (AES): {decrypted_message_aes}")
 
-
-# Example usage:
 key_rc4 = get_random_bytes(16)  # 128-bit key
 message = "Hello, RC4!"
 
