@@ -48,7 +48,7 @@ def get_datetime_from_line(line: str) -> datetime:
     Extract datetime from a line in the format: "YYYY-MM-DD HH:MM:SS".
     """
     datetime_str = line.split(" - ")[0]
-    return datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S")
+    return datetime.strptime(datetime_str,"%Y-%m-%d %H:%M:%S.%f")
 
 @app.get("/decrypt/{algorithm}")
 async def decr(algorithm:str,cipher:dict):
